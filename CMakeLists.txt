@@ -22,6 +22,9 @@ if(LIBMODC_TEST)
         set_property(TEST ${ARGV0} PROPERTY LABELS ${ARGV1})
     endmacro()
 
+    add_modc_test(test_option_some_none test_option)
+    add_modc_test(test_option_unwrap_op test_option)
+
     add_modc_test(test_result_ok_err test_result)
     add_modc_test(test_result_unwrap test_result)
 endif()

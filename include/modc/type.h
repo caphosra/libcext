@@ -27,3 +27,8 @@
 #   error You should provide `typeof` by declaring MODC_NATIVE_TYPEOF. \
         If you cannot do that, you should declare MODC_DISABLE_TYPEOF_FEATURES instead.
 #endif
+
+///
+/// Compares types of two arguments.
+///
+#define ASSERT_TYPE(item1, item2, ret) _Generic((item1), TYPEOF(item2): ret, default: NULL)

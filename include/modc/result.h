@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modc/typeof.h"
+#include "modc/type.h"
 
 #include <stdlib.h>
 #include <setjmp.h>
@@ -43,23 +43,30 @@ void* __modc_unwrap(ResultBase* result, volatile void** err_obj, jmp_buf* err_jm
 
 ///
 /// Gets the type of RESULT.
-/// Do not forget to use DEFINE_RESULT and IMPL_RESULT.
 ///
 #define RESULT(OKType, ErrType) RESULT_DEREF(OKType, ErrType)*
 
 #define ASSERT_TYPE(item1, item2, ret) _Generic((item1), TYPEOF(item2): ret, default: NULL)
 
 ///
-/// Returns a function that casts result to OK.
+/// Casts a result to OK.
 ///
 #define OK(item, type) \
     (type)ASSERT_TYPE(item, ((type)NULL)->ok, __modc_ok)((void*)item)
 
 ///
-/// Returns a function that casts result to ERR.
+/// Casts a result to ERR.
 ///
 #define ERR(item, type) \
    (type)ASSERT_TYPE(item, ((type)NULL)->err, __modc_err)((void*)item)
+
+///
+/// Handles early-return from UNWRAP.
+///
+#define HANDLE_ERR(type) \
+    jmp_buf __modc_err_jmp_point; TYPEOF(((type)NULL)->err) __modc_err_type; volatile TYPEOF(((type)NULL)->err) __modc_err_obj; \
+    if (setjmp(__modc_err_jmp_point)) \
+        return ERR(__modc_err_obj, type)
 
 ///
 /// Unwraps RESULT. If it holds an error info, exit the function early.
@@ -69,11 +76,3 @@ void* __modc_unwrap(ResultBase* result, volatile void** err_obj, jmp_buf* err_jm
     (TYPEOF(result->ok)) \
         ASSERT_TYPE(result->err, __modc_err_type, __modc_unwrap) \
         ((ResultBase*)result, (volatile void**)&__modc_err_obj, &__modc_err_jmp_point)
-
-///
-/// Handles early-return from UNWRAP.
-///
-#define HANDLE_ERR(type) \
-    jmp_buf __modc_err_jmp_point; TYPEOF(((type)NULL)->err) __modc_err_type; volatile TYPEOF(((type)NULL)->err) __modc_err_obj; \
-    if (setjmp(__modc_err_jmp_point)) \
-        return ERR(__modc_err_obj, type)
