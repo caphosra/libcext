@@ -1,6 +1,6 @@
-#include "modc/option.h"
+#include "cpoly/option.h"
 
-#include "modc/test/option.h"
+#include "cpoly/test/option.h"
 
 #include <assert.h>
 #include <string.h>
@@ -21,11 +21,11 @@ OptionInt always_none() {
 void test_option_some_none() {
     OptionInt op1 = always_some(42);
 
-    assert(op1->kind == MODC_OPTION_SOME);
+    assert(op1->kind == OPTION_SOME);
     assert(*op1->some == 42);
 
     OptionInt op2 = always_none();
-    assert(op2->kind == MODC_OPTION_NONE);
+    assert(op2->kind == OPTION_NONE);
 }
 
 OptionFloat some_unwrap_op() {
@@ -48,9 +48,9 @@ OptionFloat none_unwrap_op() {
 
 void test_option_unwrap_op() {
     OptionFloat op1 = some_unwrap_op();
-    assert(op1->kind == MODC_OPTION_SOME);
+    assert(op1->kind == OPTION_SOME);
     assert(*op1->some == 3.14F);
 
     OptionFloat op2 = none_unwrap_op();
-    assert(op2->kind == MODC_OPTION_NONE);
+    assert(op2->kind == OPTION_NONE);
 }

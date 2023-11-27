@@ -1,6 +1,6 @@
-#include "modc/result.h"
+#include "cpoly/result.h"
 
-#include "modc/test/result.h"
+#include "cpoly/test/result.h"
 
 #include <assert.h>
 #include <string.h>
@@ -24,11 +24,11 @@ ResultIntChar always_err() {
 void test_result_ok_err() {
     ResultIntChar res1 = always_ok(42);
 
-    assert(res1->kind == MODC_RESULT_OK);
+    assert(res1->kind == RESULT_OK);
     assert(*res1->ok == 42);
 
     ResultIntChar res2 = always_err();
-    assert(res2->kind == MODC_RESULT_ERR);
+    assert(res2->kind == RESULT_ERR);
     assert(!strcmp(res2->err, "Why don't we use Rust?"));
 }
 
@@ -54,10 +54,10 @@ ResultFloatChar err_unwrap() {
 
 void test_result_unwrap() {
     ResultFloatChar res1 = ok_unwrap();
-    assert(res1->kind == MODC_RESULT_OK);
+    assert(res1->kind == RESULT_OK);
     assert(*res1->ok == 3.14F);
 
     ResultFloatChar res2 = err_unwrap();
-    assert(res2->kind == MODC_RESULT_ERR);
+    assert(res2->kind == RESULT_ERR);
     assert(!strcmp(res2->err, "Why don't we use Rust?"));
 }

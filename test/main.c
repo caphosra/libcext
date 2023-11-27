@@ -1,11 +1,11 @@
-#include "modc/test/option.h"
-#include "modc/test/result.h"
+#include "cpoly/test/option.h"
+#include "cpoly/test/result.h"
 
 #include <stdlib.h>
 #include <string.h>
 
-const char MODC_TEST_FAILED = 1;
-const char MODC_TEST_PASSING = 0;
+const char CPOLY_TEST_FAILED = 1;
+const char CPOLY_TEST_PASSING = 0;
 
 #define RUN_TEST(func) if (!strcmp(test_name, #func)) { func(); return 0; }
 

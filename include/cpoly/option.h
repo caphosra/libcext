@@ -1,6 +1,6 @@
 #pragma once
 
-#include "modc/type.h"
+#include "cpoly/type.h"
 
 #include <stdlib.h>
 #include <setjmp.h>
@@ -9,8 +9,8 @@
 /// Represents a kind of OPTION.
 ///
 typedef enum {
-    MODC_OPTION_NONE = 0,
-    MODC_OPTION_SOME,
+    OPTION_NONE = 0,
+    OPTION_SOME,
 } OptionKind;
 
 ///
@@ -21,8 +21,8 @@ typedef struct {
     void* some;
 } OptionBase;
 
-OptionBase* __modc_some(void* some);
-void* __modc_unwrap_option(OptionBase* option, jmp_buf* none_jmp_point);
+OptionBase* __cpoly_some(void* some);
+void* __cpoly_unwrap_option(OptionBase* option, jmp_buf* none_jmp_point);
 
 ///
 /// Gets the dereferenced type of OPTION.
@@ -43,7 +43,7 @@ void* __modc_unwrap_option(OptionBase* option, jmp_buf* none_jmp_point);
 /// Casts an item to an OPTION.
 ///
 #define SOME(item, type) \
-    (type)ASSERT_TYPE(item, ((type)NULL)->some, __modc_some)((void*)item)
+    (type)ASSERT_TYPE(item, ((type)NULL)->some, __cpoly_some)((void*)item)
 
 ///
 /// Returns NONE.
@@ -54,8 +54,8 @@ void* __modc_unwrap_option(OptionBase* option, jmp_buf* none_jmp_point);
 /// Handles early-return from UNWRAP_OP.
 ///
 #define HANDLE_NONE(type) \
-    jmp_buf __modc_none_jmp_point; \
-    if (setjmp(__modc_none_jmp_point)) \
+    jmp_buf __cpoly_none_jmp_point; \
+    if (setjmp(__cpoly_none_jmp_point)) \
         return NONE(type)
 
 ///
@@ -63,4 +63,4 @@ void* __modc_unwrap_option(OptionBase* option, jmp_buf* none_jmp_point);
 /// Do not forget to call HANDLE_NONE before using this.
 ///
 #define UNWRAP_OP(option) \
-    (TYPEOF(option->some)) ((OptionBase*)option, &__modc_none_jmp_point)
+    (TYPEOF(option->some)) ((OptionBase*)option, &__cpoly_none_jmp_point)
